@@ -128,5 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
+#직접추가한것 버전관리x
 .idea/
+migrations/
