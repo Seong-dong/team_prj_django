@@ -7,10 +7,20 @@ def index(request):
         request,
         'blog/index.html',
         {
-            'adminPosts': posts,
+            'contentsPost': posts, # ./blog/index.html로 adminPosts변수로 보낼수있음.
         }
     )
 
+def single_post_page(request, pk):
+    post = Post.objects.get(pk=pk)
+
+    return render(
+        request,
+        'blog/single_page.html',
+        {
+            'post': post,
+        }
+    )
 
 
 # 기본 셋팅값
