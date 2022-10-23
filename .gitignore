@@ -131,3 +131,4 @@ dmypy.json
 #직접추가한것 버전관리x
 .idea/
 migrations/
+_media/
