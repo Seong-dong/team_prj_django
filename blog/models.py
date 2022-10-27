@@ -13,6 +13,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self): #get_absolute_url은 장고에서 젝오하는 기능.
+        return f'/blog/category/{self.slug}/'
+
     class Meta:
         verbose_name_plural = 'Categories'
 
