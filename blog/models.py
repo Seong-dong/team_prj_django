@@ -2,6 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 
+#null = True는 db쪽
+#blank = True는 application쪽
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True) #allow_unicode가 있어야 한글 입력 가능.
+    #slug는 url텍스트 출력을 위해 설정.
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+
+
 class Post(models.Model):
     title = models.CharField(max_length=50)
     hook_text = models.CharField(max_length=100, blank=True)
@@ -15,6 +30,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     #author = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'[{self.pk}] {self.title} :: {self.author}'
