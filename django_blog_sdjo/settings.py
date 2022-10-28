@@ -127,3 +127,6 @@ DEDIA_ROOT = os.path.join(BASE_DIR, '_media') #저장경로
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#221028 QnA보다 미리추가해둔것.
+SOCIALACCOUNT_LOGIN_ON_GET=True

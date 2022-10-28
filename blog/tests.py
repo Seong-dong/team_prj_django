@@ -1,7 +1,7 @@
 from django.test import TestCase, Client #사이트에 접속하는자
 from django.contrib.auth.models import User
 from bs4 import BeautifulSoup
-from .models import Post, Category
+from .models import Post, Category, Tag
 
 class TestView(TestCase):
     def setUp(self):
@@ -23,23 +23,42 @@ class TestView(TestCase):
             name='music', slug='music'
         )
 
+        self.tag_python_kor = Tag.objects.create(
+            name='파이썬 공부', slug='파이썬 공부'
+        )
+
+        self.tag_python = Tag.objects.create(
+            name='python', slug='python'
+        )
+
+        self.tag_hello = Tag.objects.create(
+            name='hello', slug='hello'
+        )
+
         self.post_001 = Post.objects.create(
             title='첫번째 포스트 입니다.',
             content='hello world. we are the world.',
             category=self.category_programing,
             author=self.user_trump,
         )
+        self.post_001.tags.add(self.tag_hello)
+
         self.post_002 = Post.objects.create(
             title='두 번째 포스트 입니다.',
             content='테스트 코드입니다.',
             category=self.category_music,
             author=self.user_sdjo,
         )
+
         self.post_003 = Post.objects.create(
             title='세 번째 포스트 입니다.',
             content='세번째 테스트코드입니다.',
             author=self.user_sdjo,
         )
+        self.post_003.tags.add(self.tag_python_kor)
+        self.post_003.tags.add(self.tag_python)
+
+
 
     #def의 이름이 test로 시작하면 test기능으로 간주함.
     def navbar_test(self, soup):
@@ -92,14 +111,24 @@ class TestView(TestCase):
         post_001_card = main_area.find('div', id='post-1')
         self.assertIn(self.post_001.title, post_001_card.text)
         self.assertIn(self.post_001.category.name, post_001_card.text)
+        self.assertIn(self.tag_hello.name, post_001_card.text)
+        self.assertNotIn(self.tag_python.name, post_001_card.text)
+        self.assertNotIn(self.tag_python_kor.name, post_001_card.text)
 
         post_002_card = main_area.find('div', id='post-2')
         self.assertIn(self.post_002.title, post_002_card.text)
         self.assertIn(self.post_002.category.name, post_002_card.text)
+        self.assertNotIn(self.tag_hello.name, post_002_card.text)
+        self.assertNotIn(self.tag_python.name, post_002_card.text)
+        self.assertNotIn(self.tag_python_kor.name, post_002_card.text)
 
         post_003_card = main_area.find('div', id='post-3')
         self.assertIn(self.post_003.title, post_003_card.text)
         self.assertIn('미분류', post_003_card.text)
+        self.assertNotIn(self.tag_hello.name, post_003_card.text)
+        self.assertIn(self.tag_python.name, post_003_card.text)
+        self.assertIn(self.tag_python_kor.name, post_003_card.text)
+
 
         self.assertIn(self.post_001.author.username.upper(), main_area.text)
         self.assertIn(self.post_002.author.username.upper(), main_area.text)
