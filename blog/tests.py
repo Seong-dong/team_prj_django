@@ -178,6 +178,10 @@ class TestView(TestCase):
         # 2.6 첫번쨰 포스트의 내용이 영역에 있따.
         self.assertIn(self.post_001.content, post_area.text)
 
+        self.assertIn(self.tag_hello.name, post_area.text)
+        self.assertNotIn(self.tag_python.name, post_area.text)
+        self.assertNotIn(self.tag_python_kor.name, post_area.text)
+
     def test_category_page(self):
         response = self.client.get(self.category_programing.get_absolute_url())
         self.assertEqual(response.status_code, 200)
