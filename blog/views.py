@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Category, Tag
 
 
@@ -15,17 +16,6 @@ class PostList(ListView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
-# def index(request):
-#     posts = Post.objects.all().order_by('-pk')
-#     return render(
-#         request,
-#         'blog/index.html',
-#         {
-#             'contentsPost': posts, # ./blog/index.html로 adminPosts변수로 보낼수있음.
-#         }
-#     )
-
-
 class PostDetail(DetailView):
     ##post_list.html로 만들어야함
     model = Post # 기본설정post_detail쪽으로 넘겨줌.
@@ -37,10 +27,18 @@ class PostDetail(DetailView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+            #form 은 현재 class의 instance
+            return super(PostCreate, self).form_valid(form)
+        else:
+            return redirect('/blog/')
 
 
 

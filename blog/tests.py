@@ -8,7 +8,7 @@ class TestView(TestCase):
         self.client = Client()
         self.user_trump = User.objects.create_user(
             username='trump',
-            password='1'
+            password='trump'
         )
         self.user_sdjo = User.objects.create_user(
             username='sdjo',
@@ -213,7 +213,13 @@ class TestView(TestCase):
         self.assertNotIn(self.post_002.title, main_area.text)
         self.assertNotIn(self.post_003.title, main_area.text)
 
-    def test_create_post(self):
+    def test_create_post_without_login(self):
+        response = self.client.get('/blog/create_post/')
+        print('통신결과: ',response.status_code)
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_create_post_with_login(self):
+        self.client.login(username='trump', password='trump')
         response = self.client.get('/blog/create_post/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -221,3 +227,16 @@ class TestView(TestCase):
         self.assertEqual('Create Post - Blog', soup.title.text)
         main_area = soup.find('div', id='main-area')
         self.assertIn('Create a New Post', main_area.text)
+
+        self.client.post(
+            '/blog/create_post/',
+            {
+                'title': 'Post Form 만들기',
+                'content': '페이지 생성'
+            }
+        )
+
+        last_post = Post.objects.last()
+        self.assertEqual(last_post.title, 'Post Form 만들기')
+        self.assertEqual(last_post.author.username, 'trump')
+
