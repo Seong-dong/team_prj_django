@@ -1,6 +1,12 @@
 {% extends 'blog/base.html' %}
 
 {% block main_area %}
+{% if user.is_authenticated %}
+{% if user.is_staff or user.is_superuser %}
+<a href="/blog/create_post/" class="btn btn-info btn-sm float-right"><i class="fa-solid fa-pencil"></i>&nbsp;&nbsp; New Post</a>
+{% endif %}
+{% endif %}
+
 <h1>
     Blog
     {% if category %}
@@ -8,7 +14,7 @@
     / {{ category }}
     {% endif %}
     {% if tag %}
-        <span class="badge badge-light float-right"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>
+    <span class="badge badge-light float-right"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>
     {% endif %}
 
 
