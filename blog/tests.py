@@ -14,6 +14,7 @@ class TestView(TestCase):
             username='sdjo',
             password='sdjo'
         )
+
         self.user_sdjo.is_staff = True
         self.user_sdjo.save()
 
@@ -246,3 +247,40 @@ class TestView(TestCase):
         self.assertEqual(last_post.title, 'Post Form 만들기')
         self.assertEqual(last_post.author.username, 'sdjo')
 
+    def test_update_post(self):
+        update_post_url = f'/blog/update_post/{self.post_003.pk}'
+        # 로그 아웃 상태에서 접근하는 경우
+        response = self.client.get(update_post_url)
+        self.assertNotEqual(response.status_code, 200)
+        # 로그인은 했으나 작성자 권한이 없는 경우
+        self.assertNotEqual(self.post_003.author, self.user_trump)
+        self.client.login(username='trump', password='trump')
+        response = self.client.get(update_post_url)
+        self.assertNotEqual(response.status_code, 200)
+
+        # 작성자(sdjo)로 접근 하는 경우
+        self.assertEqual(self.post_003.author, self.user_sdjo)
+        self.client.login(username='sdjo', password='sdjo')
+        response = self.client.get(update_post_url)
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertEqual('Edit Post - Blog', soup.title.text)
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('Edit Post', main_area.text)
+
+        response = self.client.post(
+            update_post_url,
+            {
+                'title':'세 번째 포스트를 수정했습니다.',
+                'content':'안녕하세요????네??',
+                'category': self.category_music.pk
+            },
+            follow=True #수정된 페이지 리다이렉트를 위한 값.
+        )
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('세 번째 포스트를 수정했습니다', main_area.text)
+        self.assertIn('안녕하세요', main_area.text)
+        self.assertIn(self.category_music.name, main_area.text)
