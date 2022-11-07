@@ -61,8 +61,6 @@ class TestView(TestCase):
         self.post_003.tags.add(self.tag_python_kor)
         self.post_003.tags.add(self.tag_python)
 
-
-
     #def의 이름이 test로 시작하면 test기능으로 간주함.
     def navbar_test(self, soup):
         navbar = soup.nav
@@ -131,7 +129,6 @@ class TestView(TestCase):
         self.assertNotIn(self.tag_hello.name, post_003_card.text)
         self.assertIn(self.tag_python.name, post_003_card.text)
         self.assertIn(self.tag_python_kor.name, post_003_card.text)
-
 
         self.assertIn(self.post_001.author.username.upper(), main_area.text)
         self.assertIn(self.post_002.author.username.upper(), main_area.text)
@@ -235,11 +232,15 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('Create a New Post', main_area.text)
 
+        tag_str_input = main_area.find('input', id="id_tags_str")
+        self.assertTrue(tag_str_input)
+
         self.client.post(
             '/blog/create_post/',
             {
                 'title': 'Post Form 만들기',
-                'content': '페이지 생성'
+                'content': '페이지 생성',
+                'tags_str': 'new tag; 한글 태그, python'
             }
         )
 
@@ -247,20 +248,29 @@ class TestView(TestCase):
         self.assertEqual(last_post.title, 'Post Form 만들기')
         self.assertEqual(last_post.author.username, 'sdjo')
 
+        self.assertEqual(last_post.tags.count(), 3)
+        self.assertTrue(Tag.objects.get(name='new tag'))
+        self.assertTrue(Tag.objects.get(name='한글 태그'))
+        self.assertTrue(Tag.objects.get(name='python'))
+        print('tag개수 : ', Tag.objects.count())
+
     def test_update_post(self):
-        update_post_url = f'/blog/update_post/{self.post_003.pk}'
+        update_post_url = f'/blog/update_post/{self.post_003.pk}/'
         # 로그 아웃 상태에서 접근하는 경우
         response = self.client.get(update_post_url)
         self.assertNotEqual(response.status_code, 200)
         # 로그인은 했으나 작성자 권한이 없는 경우
         self.assertNotEqual(self.post_003.author, self.user_trump)
         self.client.login(username='trump', password='trump')
+        print('update_post_url ::: ', update_post_url)
         response = self.client.get(update_post_url)
+        print(response.status_code)
         self.assertNotEqual(response.status_code, 200)
 
         # 작성자(sdjo)로 접근 하는 경우
         self.assertEqual(self.post_003.author, self.user_sdjo)
         self.client.login(username='sdjo', password='sdjo')
+        print('update_post_url ::: ', update_post_url)
         response = self.client.get(update_post_url)
         self.assertEqual(response.status_code, 200)
 
