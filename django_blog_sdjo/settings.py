@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'crispy_forms', #form 양식 라이브러리추가
+    'markdownx',
 
     'blog',
     'single_pages',

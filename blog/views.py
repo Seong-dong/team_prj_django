@@ -38,15 +38,15 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form): #form 은 현재 class의 instance
         current_user = self.request.user
-        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser): #로그인이 되었는가?
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
             form.instance.author = current_user
             response = super(PostCreate, self).form_valid(form)
 
-            tag_str = self.request.POST.get('tags_str')
-            if tag_str:
-                tag_str = tag_str.strip()
-                tag_str = tag_str.replace(',', ';')
-                tags_list = tag_str.split(';')
+            tags_str = self.request.POST.get('tags_str')
+            if tags_str:
+                tags_str = tags_str.strip()
+                tags_str = tags_str.replace(',', ';')
+                tags_list = tags_str.split(';')
 
                 for t in tags_list:
                     t = t.strip()
@@ -65,7 +65,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
     template_name = 'blog/post_update_form.html'
-    #get | post 식별
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user == self.get_object().author:
             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
@@ -87,9 +87,9 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
         tags_str = self.request.POST.get('tags_str')
         if tags_str:
-            tag_str = tags_str.strip()
-            tag_str = tag_str.replace(',', ';')
-            tags_list = tag_str.split(';')
+            tags_str = tags_str.strip()
+            tags_str = tags_str.replace(',', ';')
+            tags_list = tags_str.split(';')
 
             for t in tags_list:
                 t = t.strip()
