@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
 
+    'crispy_forms', #form 양식 라이브러리추가
+
     'blog',
     'single_pages',
 ]
@@ -130,3 +132,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #221028 QnA보다 미리추가해둔것.
 SOCIALACCOUNT_LOGIN_ON_GET=True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
