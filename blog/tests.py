@@ -80,7 +80,7 @@ class TestView(TestCase):
         categories_card = soup.find('div', id='categories-card')
         #print('categories_card : ', categories_card)
         self.assertIn('Categories', categories_card.text)
-        print('category_programing.post_set : ', self.category_programing.post_set.count()) #post_set은 models의 category아래 post_set 객체를말함
+        #print('category_programing.post_set : ', self.category_programing.post_set.count()) #post_set은 models의 category아래 post_set 객체를말함
         self.assertIn(f'{self.category_programing} ({self.category_programing.post_set.count()})',
                       categories_card.text
                       )
@@ -145,7 +145,7 @@ class TestView(TestCase):
         self.navbar_test(soup)
         self.assertIn('Blog', soup.title.text)
 
-        print("게시물이 개수는?:", Post.objects.count())
+        #print("게시물이 개수는?:", Post.objects.count())
         # 2.2 메인영역에 "아직 게시물이 없습니다."
         main_area = soup.find('div', id='main-area')
         self.assertIn('아직 게시물이 없습니다.', main_area.text)
@@ -215,7 +215,6 @@ class TestView(TestCase):
 
     def test_create_post_without_login(self):
         response = self.client.get('/blog/create_post/')
-        print('통신결과: ',response.status_code)
         self.assertNotEqual(response.status_code, 200)
 
     def test_create_post_with_login(self):
@@ -252,7 +251,6 @@ class TestView(TestCase):
         self.assertTrue(Tag.objects.get(name='new tag'))
         self.assertTrue(Tag.objects.get(name='한글 태그'))
         self.assertTrue(Tag.objects.get(name='python'))
-        print('tag개수 : ', Tag.objects.count())
 
     def test_update_post(self):
         update_post_url = f'/blog/update_post/{self.post_003.pk}/'
@@ -262,15 +260,12 @@ class TestView(TestCase):
         # 로그인은 했으나 작성자 권한이 없는 경우
         self.assertNotEqual(self.post_003.author, self.user_trump)
         self.client.login(username='trump', password='trump')
-        print('update_post_url ::: ', update_post_url)
         response = self.client.get(update_post_url)
-        print(response.status_code)
         self.assertNotEqual(response.status_code, 200)
 
         # 작성자(sdjo)로 접근 하는 경우
         self.assertEqual(self.post_003.author, self.user_sdjo)
         self.client.login(username='sdjo', password='sdjo')
-        print('update_post_url ::: ', update_post_url)
         response = self.client.get(update_post_url)
         self.assertEqual(response.status_code, 200)
 
@@ -280,12 +275,17 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('Edit Post', main_area.text)
 
+        tag_str_input = main_area.find('input', id='id_tags_str')
+        self.assertTrue(tag_str_input)
+        self.assertIn('파이썬 공부; python', tag_str_input.attrs['value'])
+
         response = self.client.post(
             update_post_url,
             {
                 'title':'세 번째 포스트를 수정했습니다.',
                 'content':'안녕하세요????네??',
-                'category': self.category_music.pk
+                'category': self.category_music.pk,
+                'tags_str': '파이썬 공부; 한글 태그, some tag'
             },
             follow=True #수정된 페이지 리다이렉트를 위한 값.
         )
@@ -294,3 +294,8 @@ class TestView(TestCase):
         self.assertIn('세 번째 포스트를 수정했습니다', main_area.text)
         self.assertIn('안녕하세요', main_area.text)
         self.assertIn(self.category_music.name, main_area.text)
+
+        self.assertIn('파이썬 공부', main_area.text)
+        self.assertIn('한글 태그', main_area.text)
+        self.assertIn('some tag', main_area.text)
+        self.assertNotIn('python', main_area.text)
