@@ -43,14 +43,17 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             response = super(PostCreate, self).form_valid(form)
 
             tags_str = self.request.POST.get('tags_str')
-            if tags_str:
+            if tags_str: #tag가 있는 경우
                 tags_str = tags_str.strip()
                 tags_str = tags_str.replace(',', ';')
                 tags_list = tags_str.split(';')
 
                 for t in tags_list:
                     t = t.strip()
+                    if t == "" or t == " ":
+                        t = "null"
                     tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                    #t가있으면 tag로 받고, 없으면 is_tag_created로 받음.
                     if is_tag_created:
                         tag.slug = slugify(t, allow_unicode=True)
                         tag.save()
@@ -93,6 +96,8 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
             for t in tags_list:
                 t = t.strip()
+                if t == "" or t == " ":
+                    t = "null"
                 tag, is_tag_created = Tag.objects.get_or_create(name=t)
                 if is_tag_created:
                     tag.slug = slugify(t, allow_unicode=True)
