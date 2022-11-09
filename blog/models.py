@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 
-#null = True는 db쪽
-#blank = True는 application쪽
 from markdown import markdown
 from markdownx.models import MarkdownxField
 
