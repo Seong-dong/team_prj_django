@@ -388,7 +388,7 @@ class TestView(TestCase):
         update_comment_form = soup.find('form', id='comment-form')
         content_textarea = update_comment_form.find('textarea', id='id_content')
         self.assertIn(self.comment_001.content, content_textarea.text)
-        sleep(2)
+        #sleep(2)
         response = self.client.post(
             '/blog/update_comment/1/',
             {
@@ -402,3 +402,22 @@ class TestView(TestCase):
         comment_001_div = soup.find('div', id='comment-1')
         self.assertIn('오바마의 댓글을 수정합니다.', comment_001_div.text)
         self.assertIn('Updated: ', comment_001_div.text)
+
+    def test_search(self):
+        post_about_python = Post.objects.create(
+            title='파이썬에 대한 포스트입니다.',
+            content='Hello World, We are the world',
+            author=self.user_trump
+        )
+
+        response = self.client.get('/blog/search/파이썬/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        main_area = soup.find('div', id='main-area')
+
+        self.assertIn('Search: 파이썬 (2)', main_area.text)
+        self.assertNotIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertIn(self.post_003.title, main_area.text)
+        self.assertIn(post_about_python.title, main_area.text)
