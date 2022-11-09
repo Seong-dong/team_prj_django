@@ -13,6 +13,7 @@ class PostList(ListView):
     model = Post # 기본설정post_list쪽으로 넘겨줌.
     # template_name = 'blog/index.html' #지정페이지사용법
     ordering = '-pk'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
