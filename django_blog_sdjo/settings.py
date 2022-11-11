@@ -34,8 +34,9 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    'common.apps.CommonConfig', #커스텀 로그인기능 구현
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth', #로그인기능
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
