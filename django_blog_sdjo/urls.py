@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('accounts/', include('allauth.urls')),
+    path('common/',include('common.urls')), #로그인기능
     path('', include('single_pages.urls')),
 
 ]
