@@ -28,7 +28,7 @@
                         {{ user.username }}
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/accounts/logout/">Log Out</a>
+                        <a class="dropdown-item" href="{% url 'common:logout' %}">Log Out</a>
                     </div>
                 </li>
                 {% else %}
