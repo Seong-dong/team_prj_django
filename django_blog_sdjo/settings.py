@@ -28,11 +28,8 @@ DEBUG = int(os.environ.get('DEBUG', 0))
 if os.environ.get('DJANGO_ALLOWED_HOSTS'):
     ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 else:
-<<<<<<< HEAD
     ALLOWED_HOSTS = ["darkquiz.mooo.com","192.168.45.193"]
-=======
     ALLOWED_HOSTS = ['192.168.45.193','darkquiz.mooo.com']
->>>>>>> origin/main
 
 
 # Application definition
