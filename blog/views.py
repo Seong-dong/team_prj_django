@@ -39,11 +39,11 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff #유저 권한 체크
+        return self.request.user.is_superuser or self.request.user.is_staff or self.request.user.is_active #유저 권한 체크
 
     def form_valid(self, form): #form 은 현재 class의 instance
         current_user = self.request.user
-        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser or current_user.is_active):
             form.instance.author = current_user
             response = super(PostCreate, self).form_valid(form)
 
@@ -110,6 +110,14 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
                 self.object.tags.add(tag)
         return response
 
+def delete_post(request, pk):
+    post = Post.objects.get(pk=pk)
+
+    if request.user.is_authenticated and request.user == post.author or request.user.is_superuser:
+        post.delete()
+        return redirect('/blog/')
+    else:
+        raise PermissionDenied
 
 def category_page(request, slug):
     if slug == 'no_category':

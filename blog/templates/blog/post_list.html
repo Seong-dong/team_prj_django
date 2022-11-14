@@ -2,7 +2,7 @@
 
 {% block main_area %}
 {% if user.is_authenticated %}
-{% if user.is_staff or user.is_superuser %}
+{% if user.is_staff or user.is_superuser or user.is_active %}
 <a href="/blog/create_post/" class="btn btn-info btn-sm float-right"><i class="fa-solid fa-pencil"></i>&nbsp;&nbsp; New Post</a>
 {% endif %}
 {% endif %}

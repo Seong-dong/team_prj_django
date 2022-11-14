@@ -24,8 +24,15 @@
 
     <hr>
 
-    {% if user.is_authenticated and user == post.author %}
-    <a type="button" href="/blog/update_post/{{ post.pk }}/" class="btn btn-info btn-sm float-right"><i class="fas fa-pen"></i>&nbsp;&nbsp; Edit Post</a>
+    {% if user.is_authenticated and user == post.author%}
+    <div class="float-right">
+    <a type="button" href="/blog/update_post/{{ post.pk }}/" class="btn btn-info btn-sm"><i class="fas fa-pen"></i>&nbsp;&nbsp; Edit Post</a>
+    <a type="button" href="/blog/delete_post/{{ post.pk }}/" class="btn btn-danger btn-sm"><i class="fas fa-pen"></i>&nbsp;&nbsp; Delete Post</a>
+    </div>
+    {% elif user.is_authenticated and user == post.author or user.is_superuser %}
+    <div class="float-right">
+    <a type="button" href="/blog/delete_post/{{ post.pk }}/" class="btn btn-danger btn-sm"><i class="fas fa-pen"></i>&nbsp;&nbsp; Admin : Delete Post</a>
+    </div>
     {% endif %}
     <!-- Date/Time -->
     <p>Posted on {{ post.created_at }}</p>
