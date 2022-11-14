@@ -15,7 +15,9 @@
         <div class="row justify-content-between">
             <div class="row">
                 <div class="col-lg-8">
-                    <h1>test</h1>
+                    <h1>안녕하세요. 조성동 입니다.</h1>
+                    <h3 class="text-secondary">직무 전환을 하고자 공부하고 있습니다.</h3>
+                    <h5 class="text-warning">희망 직무는 클라우드엔지니어 또는 파이썬 웹 개발입니다.</h5>
                 </div>
                 <div class="col-lg-4">
                     <img class="img-fluid" src="{% static 'single_pages/images/cafe.jpg' %}">
@@ -34,29 +36,65 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="card" data-toggle="modal" data-target="#pop1">
-                    <img class="card-img-top" src="{% static 'single_pages/images/ddochi.jpg' %}">
+                    <img class="card-img-top" src="{% static 'single_pages/images/edu.jpg' %}">
                     <div class="card-body">
-                        <h5 class="card-title">학력</h5>
-                        <p>학업에관한내용</p>
+                        <h5 class="card-title">EDUCATION</h5>
+                        <br>
+                        <hr/>
+                        <ul>
+                            <li> 대학원 <br>
+                                | 홍익대학교 문화예술경영대학원 <br>
+                                | 2019.03 ~ 2022.08(입학/졸업) <br>
+                                - 문화예술MBA(문화예술경영학석사) </li>
+                            <li> 사이버대학교 <br>
+                                | 한양사이버대학교 <br>
+                                | 2018.09 ~ 2020.08(편입/졸업) <br>
+                                - 디자인기획 전공(디자인학사), <br>
+                                - 컴퓨터공학 전공(공학사)</li>
+                            <li> 대학교 <br>
+                                | 원광대학교 <br>
+                                | 2009.03 ~ 2016.02(입학/졸업) <br>
+                                - 경영학부(경영학사), <br>
+                                - 패션주얼리디자인산업전공 <br>
+                                &nbsp;&nbsp;(디자인산업학사), <br>
+                                - 경찰행정학과</li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="card" data-toggle="modal" data-target="#pop2">
-                    <img class="card-img-top" src="{% static 'single_pages/images/ddochi.jpg' %}">
+                    <img class="card-img-top" src="{% static 'single_pages/images/career.jpg' %}">
                     <div class="card-body">
-                        <h5 class="card-title">경력</h5>
-                        <p>경력에 관한 내용</p>
+                        <h5 class="card-title">CAREER</h5>
+                        <span class="text-muted">(경력기술 click)</span>
+                        <hr/>
+                        <ul>
+                            <li> P회사(모자 제조업) <br>
+                                | 매출액 규모 : 약 800억 <br>
+                                | 2021.07 ~ 2022.07(퇴사) <br>
+                                - 경영기획실 대리
+                            </li>
+                            <li> W회사(냉온수기, 정수기 제조업) <br>
+                                | 매출액 규모 : 약 1300억 <br>
+                                | 2016.02 ~ 2021.06(퇴사) <br>
+                                - 구매팀 대리 / 정보전략 겸직
+                            </li>
+                            <li> 청년창업 <br>
+                                | 2015.08 ~ 2015.10(폐업) <br>
+                                - 공동대표-휴게소 휴게 음식점
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="card" data-toggle="modal" data-target="#pop3">
-                    <img class="card-img-top" src="{% static 'single_pages/images/ddochi.jpg' %}">
+                    <img class="card-img-top" src="{% static 'single_pages/images/learn.jpg' %}">
                     <div class="card-body">
-                        <h5 class="card-title">교육</h5>
+                        <h5 class="card-title">Training</h5>
                         <p>교육이수 내용</p>
                     </div>
                 </div>
@@ -99,7 +137,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    {% include 'single_pages/career_description.html' %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
