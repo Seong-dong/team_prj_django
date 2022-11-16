@@ -50,7 +50,7 @@
     <hr>
 
     <!-- Post Content -->
-    <p>{{ post.get_content_markdown | safe }}</p>
+    <p>{{ post.get_content_markdown | safe | linebreaksbr }}</p>
 
     {% if post.tags.exists %}
     <i class="fa-solid fa-tags"></i>
