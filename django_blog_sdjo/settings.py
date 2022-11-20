@@ -34,7 +34,6 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'common.apps.CommonConfig', #커스텀 로그인기능 구현
     'django.contrib.admin',
     'django.contrib.auth', #로그인기능
     'django.contrib.contenttypes',
@@ -52,8 +51,11 @@ INSTALLED_APPS = [
     'crispy_forms', #form 양식 라이브러리추가
     'markdownx',
 
+    #custom app
     'blog',
     'single_pages',
+    'common.apps.CommonConfig', #커스텀 로그인기능 구현
+    'lotto',
 ]
 
 MIDDLEWARE = [
