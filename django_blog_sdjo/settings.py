@@ -28,8 +28,8 @@ DEBUG = int(os.environ.get('DEBUG', 1))
 if os.environ.get('DJANGO_ALLOWED_HOSTS'):
     ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 else:
-    #ALLOWED_HOSTS = ["darkquiz.mooo.com", "192.168.45.193", "127.0.0.1"]
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ["darkquiz.mooo.com", "192.168.45.193", "127.0.0.1"]
+    #ALLOWED_HOSTS = []
 
 # Application definition
 
