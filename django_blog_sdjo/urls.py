@@ -25,7 +25,6 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('accounts/', include('allauth.urls')),
     path('common/', include('common.urls')), #로그인기능
-    path('lotto/', include('lotto.urls')), #로또 번호 생성 페이지
     path('', include('single_pages.urls')),
 
 ]
