@@ -1,0 +1,35 @@
+{% extends 'blog/base.html' %}
+
+{% block main_area %}
+
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">TITLE</th>
+      <th scope="col">AUTHOR</th>
+      <th scope="col">DATE</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for board in board_list %}
+    <tr>
+      <th scope="row">{{ board.pk }}</th>
+      <td><a href="{{ board.get_absolute_url }}">{{ board.title }}</a></td>
+      <td>{{ board.author }}</td>
+      <td>{{ board.created_at }}</td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+<hr/>
+
+{% if user.is_authenticated %}
+<a href="/board/create/" type="button" class="btn btn-secondary float-right">Write</a>
+{% else %}
+<a href="#" data-toggle="modal" data-target="#loginModal" type="button" class="btn btn-primary float-right">Disable</a>
+{% endif %}
+
+
+{% endblock %}
