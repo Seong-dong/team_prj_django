@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     'crispy_forms', #form 양식 라이브러리추가
     'markdownx',
+    'django_summernote',
 
     #custom app
     'blog',
@@ -168,3 +169,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' #이메일인증?
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'

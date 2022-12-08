@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
+
+from .forms import BoardForm
 from .models import Board
 # Create your views here.
 
@@ -24,7 +26,7 @@ class BoardDetail(DetailView):
 
 class BoardCreate(LoginRequiredMixin, CreateView):
     model = Board
-    fields = ['title', 'content']
+    form_class = BoardForm
     #
     # def test_func(self):
     #     return self.request.user.is_superuser or self.request.user.is_staff or self.request.user.is_active #유저 권한 체크
