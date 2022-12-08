@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'blog',
     'single_pages',
     'common.apps.CommonConfig', #커스텀 로그인기능 구현
-    'lotto',
+    'board',
 ]
 
 MIDDLEWARE = [
