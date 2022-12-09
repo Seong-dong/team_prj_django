@@ -13,7 +13,7 @@ class BoardList(ListView):
     model = Board
     # template_name = 'blog/index.html' #지정페이지사용법
     ordering = '-pk'
-    # paginate_by = 5
+    paginate_by = 10
     #
     # def get_context_data(self, **kwargs):
     #     context = super(PostList, self).get_context_data()
