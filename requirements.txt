@@ -23,6 +23,7 @@ ipython==8.5.0
 jedi==0.18.1
 Markdown==3.4.1
 matplotlib-inline==0.1.6
+mysqlclient==2.1.1
 oauthlib==3.2.2
 parso==0.8.3
 pickleshare==0.7.5
