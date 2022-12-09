@@ -23,14 +23,26 @@ services:
       - ./.env.prod
     depends_on:
       - db
+
   db:
-    image: postgres:12.0-alpine
+    build: ./mariaDB
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - mariadb_data:/var/lib/mysql
     ports:
-      - 5432:5432
-    env_file:
-      - ./.env.prod.db
+      - 3306:3306
+    environment:
+      MARIADB_USER: icurfer
+      MARIADB_PASSWORD: P@ssw0rd!@
+      MARIADB_DATABASE: do_it_django_prod
+      MARIADB_ROOT_PASSWORD: P@ssw0rd!@
+#  db:
+#    image: postgres:12.0-alpine
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+#    ports:
+#      - 5432:5432
+#    env_file:
+#      - ./.env.prod.db
 
 volumes:
   postgres_data:
