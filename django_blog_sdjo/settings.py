@@ -100,6 +100,7 @@ DATABASES = {
         'USER': os.environ.get('SQL_USER', 'user'),
         'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
         'HOST': os.environ.get('SQL_HOST', 'localhost'),
+        # 'HOST': os.environ.get('SQL_HOST', '127.0.0.1'), #쿠버네티스환경 same pod에서 localhost안됨 127.0.0.1로 넣어야됨.
         #'PORT': os.environ.get('SQL_PORT', '5432'),
         'PORT': os.environ.get('SQL_PORT', '3306'),
     }
