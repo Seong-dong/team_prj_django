@@ -15,6 +15,7 @@ jobs:
         python-version: [3.8]
 
     steps:
+    # git에서 설정한 비공개 변수
     - name: checkout source code
       uses: actions/checkout@v3
     
@@ -57,3 +58,31 @@ jobs:
       id: push-image
       run: |
         docker push ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }}
+
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+
+    - name: Checkout kustomize repository
+      uses: actions/checkout@v2
+      with:
+        repository: $GITHUB_USERNAME/k8s-manifest-repo
+        ref: main
+        token: \${{ secrets.ACTION_TOKEN }}
+        path: k8s-manifest-repo
+
+    - name: Update Kubernetes resources
+      run: |
+        echo \${{ steps.login-ecr.outputs.registry }}
+        echo \${{ steps.image-info.outputs.ecr_repository }}
+        echo \${{ steps.image-info.outputs.image_tag }}
+        cd k8s-manifest-repo/overlays/dev/
+        kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
+        cat kustomization.yaml
+
+    - name: Commit files
+      run: |
+        cd k8s-manifest-repo
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "github-actions"
+        git commit -am "Update image tag"
+        git push -u origin main
