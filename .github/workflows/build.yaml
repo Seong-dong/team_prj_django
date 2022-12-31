@@ -40,24 +40,47 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Set var
-      id: set-var
+    # - name: Set var
+    #   id: set-var
+    #   run: |
+    #     echo ::set-output name=ECR_REGISTRY::${{ steps.login-ecr.outputs.registry }}
+    #     echo ::set-output name=ECR_REPOSITORY::web
+    #     echo ::set-output name=IMAGE_TAG::$(cat VERSION)
+    
+    - name: Get image tag(verion)
+      id: image
       run: |
-        echo ::set-output name=ECR_REGISTRY::${{ steps.login-ecr.outputs.registry }}
-        echo ::set-output name=ECR_REPOSITORY::web
-        echo ::set-output name=IMAGE_TAG::$(cat VERSION)
+        VERSION=$(echo ${{ github.sha }} | cut -c1-8)
+        echo VERSION=$VERSION
+        echo "::set-output name=version::$VERSION"
+    
+    - name: Build, tag, and push image to Amazon ECR
+      id: image-info
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
+        IMAGE_TAG: ${{ steps.image.outputs.version }}
+      run: |
+        echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
+        echo "::set-output name=image_tag::$IMAGE_TAG"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Docker image Build
-      id: build-image
-      run: |
-        docker build \
-        -f Dockerfile \
-        -t ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }} .
+    # - name: Docker image Build
+    #   id: image-info
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: web
+    #     IMAGE_TAG: ${{ steps.image.outputs.version }}
+    #   run: |
+    #     docker build \
+    #     -f Dockerfile \
+    #     -t ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }} .
 
-    - name: Docker image Push
-      id: push-image
-      run: |
-        docker push ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }}
+    # - name: Docker image Push
+    #   id: push-image
+    #   run: |
+    #     docker push ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }}
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
