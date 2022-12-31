@@ -65,7 +65,7 @@ jobs:
     - name: Checkout kustomize repository
       uses: actions/checkout@v2
       with:
-        repository: https://github.com/Seong-dong/team_prj_k8s
+        repository: "Seong-dong/team_prj_k8s"
         ref: main
         token: \${{ secrets.ACTION_TOKEN }}
         path: team_prj_k8s
