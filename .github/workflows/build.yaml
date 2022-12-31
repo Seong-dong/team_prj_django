@@ -67,16 +67,16 @@ jobs:
       with:
         repository: "Seong-dong/team_prj_k8s"
         ref: main
-        token: \${{ secrets.ACTION_TOKEN }}
+        token: ${{ secrets.ACTION_TOKEN }}
         path: team_prj_k8s
 
     - name: Update Kubernetes resources
       run: |
-        echo \${{ steps.login-ecr.outputs.registry }}
-        echo \${{ steps.image-info.outputs.ecr_repository }}
-        echo \${{ steps.image-info.outputs.image_tag }}
+        echo ${{ steps.login-ecr.outputs.registry }}
+        echo ${{ steps.image-info.outputs.ecr_repository }}
+        echo ${{ steps.image-info.outputs.image_tag }}
         cd team_prj_k8s/overlays/dev/
-        kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
+        kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
         cat kustomization.yaml
 
     - name: Commit files
