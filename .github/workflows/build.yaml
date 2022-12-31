@@ -65,23 +65,23 @@ jobs:
     - name: Checkout kustomize repository
       uses: actions/checkout@v2
       with:
-        repository: $GITHUB_USERNAME/k8s-manifest-repo
+        repository: $GITHUB_USERNAME/team_prj_k8s
         ref: main
         token: \${{ secrets.ACTION_TOKEN }}
-        path: k8s-manifest-repo
+        path: team_prj_k8s
 
     - name: Update Kubernetes resources
       run: |
         echo \${{ steps.login-ecr.outputs.registry }}
         echo \${{ steps.image-info.outputs.ecr_repository }}
         echo \${{ steps.image-info.outputs.image_tag }}
-        cd k8s-manifest-repo/overlays/dev/
+        cd team_prj_k8s/overlays/dev/
         kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
         cat kustomization.yaml
 
     - name: Commit files
       run: |
-        cd k8s-manifest-repo
+        cd team_prj_k8s
         git config --global user.email "github-actions@github.com"
         git config --global user.name "github-actions"
         git commit -am "Update image tag"
