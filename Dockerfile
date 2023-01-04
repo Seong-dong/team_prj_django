@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED 1
 
 COPY . /usr/src/app/
 RUN apt-get update
-RUN apt-get install -y gcc default-libmysqlclient-dev python-dev vim systemd
+RUN apt-get install -y gcc default-libmysqlclient-dev python-dev
 # install dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
